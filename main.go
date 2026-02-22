@@ -32,5 +32,8 @@ func main() {
 		Addr:    ":" + port,
 		Handler: r,
 	}
-	srv.ListenAndServe()
+	err := srv.ListenAndServe()
+	if err != nil && err != http.ErrServerClosed {
+		log.Fatalf("Server failed to start: %v", err)
+	}
 }

@@ -21,8 +21,7 @@ func (r *TeamRepository) Create(team *models.Team) error {
 	query := `INSERT INTO teams (name, logo, founded_year, address, city)
 			  VALUES ($1, $2, $3, $4, $5)
 			  RETURNING id, created_at, updated_at`
-	err := r.db.QueryRow(query, team.Name, team.Logo, team.FoundedYear, team.Address, team.City).
-		Scan(&team.ID, &team.CreatedAt, &team.UpdatedAt)
+	err := r.db.QueryRow(query, team.Name, team.Logo, team.FoundedYear, team.Address, team.City).Scan(&team.ID, &team.CreatedAt, &team.UpdatedAt)
 	if err != nil {
 		if utils.IsUniqueDataError(err) {
 			return utils.NewBadRequestError(ErrTeamExists)
@@ -68,7 +67,10 @@ func (r *TeamRepository) Update(team *models.Team) error {
 		}
 		return err
 	}
-	rows, _ := result.RowsAffected()
+	rows, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
 	if rows == 0 {
 		return utils.NewBadRequestError(ErrTeamNotFound)
 	}
@@ -81,7 +83,10 @@ func (r *TeamRepository) Delete(id int) error {
 	if err != nil {
 		return err
 	}
-	rows, _ := result.RowsAffected()
+	rows, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
 	if rows == 0 {
 		return utils.NewBadRequestError(ErrTeamNotFound)
 	}

@@ -21,8 +21,7 @@ func (r *PlayerRepository) Create(player *models.Player) error {
 	query := `INSERT INTO players (team_id, name, height, weight, position, jersey_number)
 			  VALUES ($1, $2, $3, $4, $5, $6)
 			  RETURNING id, created_at, updated_at`
-	err := r.db.QueryRow(query, player.TeamID, player.Name, player.Height, player.Weight, player.Position, player.JerseyNumber).
-		Scan(&player.ID, &player.CreatedAt, &player.UpdatedAt)
+	err := r.db.QueryRow(query, player.TeamID, player.Name, player.Height, player.Weight, player.Position, player.JerseyNumber).Scan(&player.ID, &player.CreatedAt, &player.UpdatedAt)
 	if err != nil {
 		if utils.IsUniqueDataError(err) {
 			return utils.NewBadRequestError(ErrPlayerExist)
@@ -74,8 +73,7 @@ func (r *PlayerRepository) Update(player *models.Player) error {
 	query := `UPDATE players SET team_id = $1, name = $2, height = $3, weight = $4, position = $5,
 			  jersey_number = $6, updated_at = NOW()
 			  WHERE id = $7 AND deleted_at IS NULL`
-	result, err := r.db.Exec(query, player.TeamID, player.Name, player.Height, player.Weight,
-		player.Position, player.JerseyNumber, player.ID)
+	result, err := r.db.Exec(query, player.TeamID, player.Name, player.Height, player.Weight, player.Position, player.JerseyNumber, player.ID)
 	if err != nil {
 		if utils.IsUniqueDataError(err) {
 			return utils.NewBadRequestError(ErrPlayerExist)
@@ -83,7 +81,10 @@ func (r *PlayerRepository) Update(player *models.Player) error {
 
 		return err
 	}
-	rows, _ := result.RowsAffected()
+	rows, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
 	if rows == 0 {
 		return utils.NewBadRequestError(ErrPlayerNotFound)
 	}
@@ -96,8 +97,10 @@ func (r *PlayerRepository) Delete(id int) error {
 	if err != nil {
 		return err
 	}
-
-	rows, _ := result.RowsAffected()
+	rows, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
 	if rows == 0 {
 		return utils.NewBadRequestError(ErrPlayerNotFound)
 	}

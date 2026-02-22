@@ -6,3 +6,7 @@ CREATE TABLE IF NOT EXISTS users (
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     deleted_at TIMESTAMPTZ DEFAULT NULL
 );
+
+-- Password is "admin123" hashed with bcrypt
+INSERT INTO users (username, password) 
+VALUES ('admin@admin.com', '$2a$10$yemFHBQpOILyJFQSKe7oc.1qOjWfB0DAEynlKjC72ONJE/NOkvxPW');
