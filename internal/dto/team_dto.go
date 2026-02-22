@@ -17,7 +17,7 @@ type UpdateTeamRequest struct {
 }
 
 type TeamResponse struct {
-	ID          uint   `json:"id"`
+	ID          int    `json:"id"`
 	Name        string `json:"name"`
 	Logo        string `json:"logo"`
 	FoundedYear int    `json:"founded_year"`

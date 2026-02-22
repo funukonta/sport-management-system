@@ -64,13 +64,13 @@ func (h *TeamHandler) FindAll(c *gin.Context) {
 }
 
 func (h *TeamHandler) FindByID(c *gin.Context) {
-	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
+	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.Error(utils.NewBadRequestError("invalid team ID"))
 		return
 	}
 
-	team, err := h.teamService.FindByID(uint(id))
+	team, err := h.teamService.FindByID(id)
 	if err != nil {
 		c.Error(err)
 		return
@@ -87,7 +87,7 @@ func (h *TeamHandler) FindByID(c *gin.Context) {
 }
 
 func (h *TeamHandler) Update(c *gin.Context) {
-	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
+	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.Error(utils.NewBadRequestError("invalid team ID"))
 		return
@@ -99,7 +99,7 @@ func (h *TeamHandler) Update(c *gin.Context) {
 		return
 	}
 
-	if err := h.teamService.Update(uint(id), req); err != nil {
+	if err := h.teamService.Update(id, req); err != nil {
 		c.Error(err)
 		return
 	}
@@ -108,13 +108,13 @@ func (h *TeamHandler) Update(c *gin.Context) {
 }
 
 func (h *TeamHandler) Delete(c *gin.Context) {
-	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
+	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.Error(utils.NewBadRequestError("invalid team ID"))
 		return
 	}
 
-	if err := h.teamService.Delete(uint(id)); err != nil {
+	if err := h.teamService.Delete(id); err != nil {
 		c.Error(err)
 		return
 	}

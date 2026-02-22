@@ -34,11 +34,11 @@ func (s *TeamService) FindAll() ([]models.Team, error) {
 	return s.teamRepo.FindAll()
 }
 
-func (s *TeamService) FindByID(id uint) (*models.Team, error) {
+func (s *TeamService) FindByID(id int) (*models.Team, error) {
 	return s.teamRepo.FindByID(id)
 }
 
-func (s *TeamService) Update(id uint, req dto.UpdateTeamRequest) error {
+func (s *TeamService) Update(id int, req dto.UpdateTeamRequest) error {
 	team := &models.Team{
 		ID:          id,
 		Name:        req.Name,
@@ -51,6 +51,6 @@ func (s *TeamService) Update(id uint, req dto.UpdateTeamRequest) error {
 	return s.teamRepo.Update(team)
 }
 
-func (s *TeamService) Delete(id uint) error {
+func (s *TeamService) Delete(id int) error {
 	return s.teamRepo.Delete(id)
 }

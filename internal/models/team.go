@@ -3,7 +3,7 @@ package models
 import "time"
 
 type Team struct {
-	ID          uint       `db:"id"`
+	ID          int        `db:"id"`
 	Name        string     `db:"name"`
 	Logo        string     `db:"logo"`
 	FoundedYear int        `db:"founded_year"`

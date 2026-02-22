@@ -12,4 +12,5 @@ func Setup(r *gin.Engine, db *sqlx.DB) {
 
 	AuthRoutes(v1, db)
 	TeamRoutes(v1, db)
+	PlayerRoutes(v1, db)
 }

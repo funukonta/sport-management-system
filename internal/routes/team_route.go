@@ -14,6 +14,10 @@ func TeamRoutes(r *gin.RouterGroup, db *sqlx.DB) {
 	teamService := services.NewTeamService(teamRepo)
 	teamHandler := handlers.NewTeamHandler(teamService)
 
+	playerRepo := repository.NewPlayerRepository(db)
+	playerService := services.NewPlayerService(playerRepo, teamRepo)
+	playerHandler := handlers.NewPlayerHandler(playerService)
+
 	team := r.Group("/teams")
 	team.Use(middleware.AuthMiddleware())
 
@@ -22,5 +26,6 @@ func TeamRoutes(r *gin.RouterGroup, db *sqlx.DB) {
 	team.GET("/:id", teamHandler.FindByID)
 	team.PUT("/:id", teamHandler.Update)
 	team.DELETE("/:id", teamHandler.Delete)
+	team.GET("/:id/players", playerHandler.FindByTeamID)
 
 }

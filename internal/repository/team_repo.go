@@ -44,7 +44,7 @@ func (r *TeamRepository) FindAll() ([]models.Team, error) {
 	return teams, nil
 }
 
-func (r *TeamRepository) FindByID(id uint) (*models.Team, error) {
+func (r *TeamRepository) FindByID(id int) (*models.Team, error) {
 	var team models.Team
 	query := `SELECT id, name, logo, founded_year, address, city, created_at, updated_at
 			  FROM teams WHERE id = $1 AND deleted_at IS NULL`
@@ -75,7 +75,7 @@ func (r *TeamRepository) Update(team *models.Team) error {
 	return nil
 }
 
-func (r *TeamRepository) Delete(id uint) error {
+func (r *TeamRepository) Delete(id int) error {
 	query := `UPDATE teams SET deleted_at = NOW() WHERE id = $1 AND deleted_at IS NULL`
 	result, err := r.db.Exec(query, id)
 	if err != nil {
