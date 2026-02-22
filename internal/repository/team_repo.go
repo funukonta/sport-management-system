@@ -3,7 +3,6 @@ package repository
 import (
 	"database/sql"
 	"errors"
-	"fmt"
 
 	"github.com/jmoiron/sqlx"
 	"github.com/sport-management-system/internal/models"
@@ -26,7 +25,7 @@ func (r *TeamRepository) Create(team *models.Team) error {
 		Scan(&team.ID, &team.CreatedAt, &team.UpdatedAt)
 	if err != nil {
 		if utils.IsUniqueDataError(err) {
-			return utils.ErrConflict
+			return utils.NewBadRequestError(ErrTeamExists)
 		}
 
 		return err
@@ -52,7 +51,7 @@ func (r *TeamRepository) FindByID(id uint) (*models.Team, error) {
 	err := r.db.Get(&team, query, id)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return nil, utils.ErrNotFound
+			return nil, utils.NewBadRequestError(ErrTeamNotFound)
 		}
 		return nil, err
 	}
@@ -65,13 +64,13 @@ func (r *TeamRepository) Update(team *models.Team) error {
 	result, err := r.db.Exec(query, team.Name, team.Logo, team.FoundedYear, team.Address, team.City, team.ID)
 	if err != nil {
 		if utils.IsUniqueDataError(err) {
-			return fmt.Errorf("team name already exists")
+			return utils.NewBadRequestError(ErrTeamExists)
 		}
 		return err
 	}
 	rows, _ := result.RowsAffected()
 	if rows == 0 {
-		return utils.ErrNotFound
+		return utils.NewBadRequestError(ErrTeamNotFound)
 	}
 	return nil
 }
@@ -84,7 +83,7 @@ func (r *TeamRepository) Delete(id uint) error {
 	}
 	rows, _ := result.RowsAffected()
 	if rows == 0 {
-		return utils.ErrNotFound
+		return utils.NewBadRequestError(ErrTeamNotFound)
 	}
 	return nil
 }

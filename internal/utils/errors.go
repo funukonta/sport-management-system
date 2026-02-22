@@ -8,21 +8,22 @@ import (
 )
 
 var (
-	ErrNotFound     = errors.New("resource not found")
-	ErrConflict     = errors.New("resource already exists")
-	ErrUnauthorized = errors.New("unauthorized")
-	ErrForbidden    = errors.New("forbidden")
-	ErrBadRequest   = errors.New("bad request")
+	ErrNotFound            = errors.New("resource not found")
+	ErrConflict            = errors.New("resource already exists")
+	ErrUnauthorized        = errors.New("unauthorized")
+	ErrForbidden           = errors.New("forbidden")
+	ErrBadRequest          = errors.New("bad request")
+	ErrInternalServerError = errors.New("internal server error")
 )
 
-type HTTPError struct {
+type CustomError struct {
 	Code    int
 	Message string
 	Data    interface{}
 	Err     error
 }
 
-func (e *HTTPError) Error() string {
+func (e *CustomError) Error() string {
 	if e.Message != "" {
 		return e.Message
 	}
@@ -32,60 +33,32 @@ func (e *HTTPError) Error() string {
 	return http.StatusText(e.Code)
 }
 
-func (e *HTTPError) Unwrap() error {
+func (e *CustomError) Unwrap() error {
 	return e.Err
 }
 
-func NewHTTPError(code int, message string, err error) *HTTPError {
-	return &HTTPError{Code: code, Message: message, Err: err}
+func NewHTTPError(code int, message string, err error) *CustomError {
+	return &CustomError{Code: code, Message: message, Err: err}
 }
 
-func NewBadRequestError(message string) *HTTPError {
+func NewBadRequestError(message string) *CustomError {
 	return NewHTTPError(http.StatusBadRequest, message, ErrBadRequest)
 }
 
-func NewUnauthorizedError(message string) *HTTPError {
+func NewUnauthorizedError(message string) *CustomError {
 	return NewHTTPError(http.StatusUnauthorized, message, ErrUnauthorized)
 }
 
-func NewValidationError(details interface{}) *HTTPError {
-	return &HTTPError{
+func NewInternalServerError(message string) *CustomError {
+	return NewHTTPError(http.StatusInternalServerError, message, ErrInternalServerError)
+}
+
+func NewValidationError(details interface{}) *CustomError {
+	return &CustomError{
 		Code:    http.StatusBadRequest,
 		Message: "validation error",
 		Data:    details,
 		Err:     ErrBadRequest,
-	}
-}
-
-func MapError(err error) (int, string, interface{}) {
-	var httpErr *HTTPError
-	if errors.As(err, &httpErr) {
-		code := httpErr.Code
-		if code == 0 {
-			code = http.StatusInternalServerError
-		}
-
-		message := httpErr.Message
-		if message == "" {
-			message = http.StatusText(code)
-		}
-
-		return code, message, httpErr.Data
-	}
-
-	switch {
-	case errors.Is(err, ErrNotFound):
-		return http.StatusNotFound, "resource not found", nil
-	case errors.Is(err, ErrConflict):
-		return http.StatusConflict, "resource already exists", nil
-	case errors.Is(err, ErrUnauthorized):
-		return http.StatusUnauthorized, "unauthorized", nil
-	case errors.Is(err, ErrForbidden):
-		return http.StatusForbidden, "forbidden", nil
-	case errors.Is(err, ErrBadRequest):
-		return http.StatusBadRequest, err.Error(), nil
-	default:
-		return http.StatusInternalServerError, "internal server error", nil
 	}
 }
 

@@ -44,7 +44,7 @@ func (h *TeamHandler) Create(c *gin.Context) {
 func (h *TeamHandler) FindAll(c *gin.Context) {
 	teams, err := h.teamService.FindAll()
 	if err != nil {
-		_ = c.Error(err)
+		c.Error(err)
 		return
 	}
 
@@ -66,13 +66,13 @@ func (h *TeamHandler) FindAll(c *gin.Context) {
 func (h *TeamHandler) FindByID(c *gin.Context) {
 	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
 	if err != nil {
-		_ = c.Error(utils.NewBadRequestError("invalid team ID"))
+		c.Error(utils.NewBadRequestError("invalid team ID"))
 		return
 	}
 
 	team, err := h.teamService.FindByID(uint(id))
 	if err != nil {
-		_ = c.Error(err)
+		c.Error(err)
 		return
 	}
 
@@ -89,18 +89,18 @@ func (h *TeamHandler) FindByID(c *gin.Context) {
 func (h *TeamHandler) Update(c *gin.Context) {
 	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
 	if err != nil {
-		_ = c.Error(utils.NewBadRequestError("invalid team ID"))
+		c.Error(utils.NewBadRequestError("invalid team ID"))
 		return
 	}
 
 	var req dto.UpdateTeamRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		_ = c.Error(utils.NewValidationError(err.Error()))
+		c.Error(utils.NewValidationError(err.Error()))
 		return
 	}
 
 	if err := h.teamService.Update(uint(id), req); err != nil {
-		_ = c.Error(err)
+		c.Error(err)
 		return
 	}
 
@@ -110,12 +110,12 @@ func (h *TeamHandler) Update(c *gin.Context) {
 func (h *TeamHandler) Delete(c *gin.Context) {
 	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
 	if err != nil {
-		_ = c.Error(utils.NewBadRequestError("invalid team ID"))
+		c.Error(utils.NewBadRequestError("invalid team ID"))
 		return
 	}
 
 	if err := h.teamService.Delete(uint(id)); err != nil {
-		_ = c.Error(err)
+		c.Error(err)
 		return
 	}
 

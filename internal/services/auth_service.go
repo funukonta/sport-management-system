@@ -1,8 +1,6 @@
 package services
 
 import (
-	"fmt"
-
 	"github.com/sport-management-system/internal/repository"
 	"github.com/sport-management-system/internal/utils"
 	"golang.org/x/crypto/bcrypt"
@@ -28,7 +26,7 @@ func (s *AuthService) Login(email, password string) (string, error) {
 
 	token, err := utils.GenerateToken(user.ID)
 	if err != nil {
-		return "", fmt.Errorf("failed to generate token: %w", err)
+		return "", err
 	}
 
 	return token, nil

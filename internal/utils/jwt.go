@@ -16,7 +16,7 @@ type Claims struct {
 func GenerateToken(userID uint) (string, error) {
 	secret := os.Getenv("JWT_SECRET")
 	if secret == "" {
-		return "", fmt.Errorf("JWT_SECRET not set")
+		return "", NewInternalServerError("secret not set")
 	}
 
 	claims := Claims{
