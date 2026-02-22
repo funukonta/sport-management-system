@@ -1,0 +1,11 @@
+CREATE TABLE IF NOT EXISTS teams (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    logo VARCHAR(255) DEFAULT '',
+    founded_year INT,
+    address TEXT DEFAULT '',
+    city VARCHAR(100) DEFAULT '',
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    deleted_at TIMESTAMPTZ DEFAULT NULL
+);
