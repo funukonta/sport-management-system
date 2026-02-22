@@ -11,4 +11,5 @@ func Setup(r *gin.Engine, db *sqlx.DB) {
 	v1 := api.Group("/v1")
 
 	AuthRoutes(v1, db)
+	TeamRoutes(v1, db)
 }

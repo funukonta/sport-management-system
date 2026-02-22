@@ -3,6 +3,8 @@ package utils
 import (
 	"errors"
 	"net/http"
+
+	"github.com/jackc/pgx/v5/pgconn"
 )
 
 var (
@@ -85,4 +87,14 @@ func MapError(err error) (int, string, interface{}) {
 	default:
 		return http.StatusInternalServerError, "internal server error", nil
 	}
+}
+
+func IsUniqueDataError(err error) bool {
+	var pgErr *pgconn.PgError
+	if errors.As(err, &pgErr) {
+		if pgErr.Code == "23505" {
+			return true
+		}
+	}
+	return false
 }

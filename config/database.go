@@ -57,6 +57,10 @@ func runMigrations(db *sqlx.DB) {
 		log.Fatalf("Failed to create migrate instance: %v", err)
 	}
 
+	if err := m.Down(); err != nil {
+		log.Fatalf("Failed to rollback migrations: %v", err)
+	}
+
 	if err := m.Up(); err != nil && err != migrate.ErrNoChange {
 		log.Fatalf("Failed to run migrations: %v", err)
 	}
