@@ -1,3 +1,2 @@
 ALTER TABLE users
-ADD COLUMN username VARCHAR(100) UNIQUE NOT NULL,
-DROP COLUMN email;
+RENAME COLUMN email TO username;
