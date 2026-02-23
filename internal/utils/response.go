@@ -7,11 +7,11 @@ import (
 )
 
 type Meta struct {
-	Total   int    `json:"total,omitempty"`
-	Page    int    `json:"page,omitempty"`
-	PerPage int    `json:"per_page,omitempty"`
-	Code    int    `json:"code,omitempty"`
-	Status  string `json:"status,omitempty"`
+	Total    int    `json:"total,omitempty"`
+	Page     int    `json:"page,omitempty"`
+	PageSize int    `json:"page_size,omitempty"`
+	Code     int    `json:"code,omitempty"`
+	Status   string `json:"status,omitempty"`
 }
 
 type Response struct {

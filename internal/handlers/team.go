@@ -42,7 +42,17 @@ func (h *TeamHandler) Create(c *gin.Context) {
 }
 
 func (h *TeamHandler) FindAll(c *gin.Context) {
-	teams, err := h.teamService.FindAll()
+	var pagination dto.PaginationQuery
+	if err := c.ShouldBindQuery(&pagination); err != nil {
+		c.Error(utils.NewValidationError(err.Error()))
+		return
+	}
+
+	limit := pagination.GetLimit()
+	offset := pagination.GetOffset()
+	page := pagination.GetPage()
+
+	teams, total, err := h.teamService.FindAllPaginated(limit, offset)
 	if err != nil {
 		c.Error(err)
 		return
@@ -60,7 +70,13 @@ func (h *TeamHandler) FindAll(c *gin.Context) {
 		})
 	}
 
-	utils.Success(c, http.StatusOK, "success", response)
+	meta := &utils.Meta{
+		Total:    total,
+		Page:     page,
+		PageSize: limit,
+	}
+
+	utils.SuccessWithMeta(c, http.StatusOK, "success", response, meta)
 }
 
 func (h *TeamHandler) FindByID(c *gin.Context) {

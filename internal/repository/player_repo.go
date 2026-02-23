@@ -43,6 +43,27 @@ func (r *PlayerRepository) FindAll() ([]models.Player, error) {
 	return players, nil
 }
 
+func (r *PlayerRepository) FindAllPaginated(limit int, offset int) ([]models.Player, int, error) {
+	var players []models.Player
+	var total int
+
+	// Get total count
+	countQuery := `SELECT COUNT(*) FROM players WHERE deleted_at IS NULL`
+	err := r.db.Get(&total, countQuery)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	// Get paginated data
+	query := `SELECT id, team_id, name, height, weight, position, jersey_number, created_at, updated_at
+			  FROM players WHERE deleted_at IS NULL ORDER BY id LIMIT $1 OFFSET $2`
+	err = r.db.Select(&players, query, limit, offset)
+	if err != nil {
+		return nil, 0, err
+	}
+	return players, total, nil
+}
+
 func (r *PlayerRepository) FindByID(id int) (*models.Player, error) {
 	var player models.Player
 	query := `SELECT id, team_id, name, height, weight, position, jersey_number, created_at, updated_at

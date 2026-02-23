@@ -49,6 +49,10 @@ func (s *PlayerService) FindAll() ([]models.Player, error) {
 	return s.playerRepo.FindAll()
 }
 
+func (s *PlayerService) FindAllPaginated(limit int, offset int) ([]models.Player, int, error) {
+	return s.playerRepo.FindAllPaginated(limit, offset)
+}
+
 func (s *PlayerService) FindByID(id int) (*models.Player, error) {
 	return s.playerRepo.FindByID(id)
 }

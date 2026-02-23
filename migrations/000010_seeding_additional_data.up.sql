@@ -1,0 +1,87 @@
+-- Insert additional teams for pagination testing (total should be 13 teams)
+INSERT INTO teams (name, logo, founded_year, address, city)
+VALUES
+('Borneo FC', 'https://example.com/borneo.png', 1999, 'Kalimantan Timur', 'Balikpapan'),
+('Bali Bhayangkara FC', 'https://example.com/bali.png', 2014, 'Bali Street', 'Denpasar'),
+('Suroboyo Bhayangkara', 'https://example.com/surabaya.png', 2009, 'Surabaya Street', 'Surabaya'),
+('Barito Putera FC', 'https://example.com/barito.png', 1992, 'Kalimantan Tengah', 'Banjarmasin'),
+('Persepam Malang', 'https://example.com/persepam.png', 2000, 'Jawa Timur', 'Malang'),
+('Sriwijaya FC', 'https://example.com/sriwijaya.png', 1998, 'Sumatera Selatan', 'Palembang'),
+('Persikabo 1973', 'https://example.com/persikabo.png', 1973, 'Jawa Barat', 'Bogor'),
+('Persijap Jepara', 'https://example.com/persijap.png', 1915, 'Jawa Tengah', 'Jepara');
+
+-- Insert additional players for teams 4-11 for pagination testing
+INSERT INTO players (team_id, name, height, weight, position, jersey_number)
+VALUES
+(4, 'Irvani Abdullah', 178, 75, 'goalkeeper', 1),
+(4, 'Agus Salim', 182, 78, 'defender', 2),
+(4, 'Dedik Setiawan', 180, 76, 'defender', 3),
+(4, 'Ricky Fajrin', 179, 75, 'midfielder', 4),
+(4, 'Sandi Saksama', 175, 70, 'midfielder', 8),
+(4, 'Stefano Lilipaly', 176, 68, 'forward', 9),
+(4, 'Ricky Frino', 177, 72, 'forward', 10),
+(5, 'Wawan Hendrawan', 180, 76, 'goalkeeper', 1),
+(5, 'Ananda Ramadhani', 183, 80, 'defender', 2),
+(5, 'Ananda Sofyan', 179, 74, 'defender', 3),
+(5, 'Fadil Sausu', 178, 73, 'midfielder', 5),
+(5, 'Hirving Lozano', 176, 70, 'midfielder', 11),
+(5, 'Nick Viergever', 187, 82, 'defender', 4),
+(5, 'Bwana Samatta', 188, 85, 'forward', 9),
+(6, 'Iqbal Muslim', 181, 77, 'goalkeeper', 1),
+(6, 'Gunawan Dwi', 182, 78, 'defender', 2),
+(6, 'Arya Swabhana', 180, 76, 'defender', 3),
+(6, 'Soudani', 185, 82, 'forward', 9),
+(6, 'Kamaruddin Mahmuddin', 177, 71, 'midfielder', 8),
+(6, 'Ahmad Mushawir', 179, 74, 'midfielder', 10),
+(6, 'Rendi Irawan', 178, 73, 'forward', 11),
+(7, 'Fabio Franco', 187, 82, 'goalkeeper', 1),
+(7, 'Muhammad Iqbal', 183, 79, 'defender', 2),
+(7, 'Wiljan Pluim', 188, 84, 'defender', 3),
+(7, 'Riko Simanjuntak', 179, 75, 'midfielder', 7),
+(7, 'Tomas Paco', 183, 80, 'midfielder', 10),
+(7, 'Juan Mahama', 185, 81, 'forward', 9),
+(7, 'Wander Luiz', 184, 79, 'forward', 11),
+(8, 'Dimas Delantang', 180, 76, 'goalkeeper', 1),
+(8, 'Ahmad Daudi', 182, 78, 'defender', 2),
+(8, 'Ade Ondrura', 181, 77, 'defender', 3),
+(8, 'Muhammad Nasuha', 178, 73, 'midfielder', 5),
+(8, 'Djadjang', 179, 74, 'midfielder', 8),
+(8, 'Renato Kaze', 183, 79, 'forward', 9),
+(8, 'Ezechi Okafor', 186, 83, 'forward', 10),
+(9, 'Bojan Hodak', 182, 77, 'goalkeeper', 1),
+(9, 'Ravel Morrison', 179, 73, 'midfielder', 7),
+(9, 'Rezki Darmawan', 180, 76, 'defender', 2),
+(9, 'Ismed Sofyan', 181, 77, 'defender', 3),
+(9, 'Muhammad Ridho', 178, 74, 'midfielder', 10),
+(9, 'Marko Milic', 189, 86, 'forward', 9),
+(9, 'Terens Puhiri', 185, 81, 'forward', 11),
+(10, 'Jantorno', 180, 76, 'goalkeeper', 1),
+(10, 'Kusala Yuda', 182, 78, 'defender', 2),
+(10, 'Dede Supriyadi', 181, 77, 'defender', 3),
+(10, 'Ahmad Bastian', 178, 73, 'midfielder', 5),
+(10, 'Andres Tunay', 179, 74, 'midfielder', 8),
+(10, 'Abduh Lestaluhu', 184, 80, 'forward', 9),
+(10, 'Rizwan', 183, 78, 'forward', 11),
+(11, 'Fahruddin Hairuddin', 181, 77, 'goalkeeper', 1),
+(11, 'Ahmad Rusandi', 182, 78, 'defender', 2),
+(11, 'Eto', 185, 82, 'defender', 3),
+(11, 'Santo Rangkuti', 178, 73, 'midfielder', 5),
+(11, 'Sutanto', 179, 74, 'midfielder', 8),
+(11, 'Marcos', 186, 83, 'forward', 9),
+(11, 'Ahmad Bustomi', 183, 79, 'forward', 11);
+
+-- Insert additional matches for pagination testing
+INSERT INTO matches (home_team_id, away_team_id, match_date, match_time, home_score, away_score, status)
+VALUES
+(4, 5, '2026-02-01', '19:00:00', 2, 1, 'finished'),
+(6, 7, '2026-02-02', '19:00:00', 1, 1, 'finished'),
+(8, 9, '2026-02-03', '19:00:00', 3, 0, 'finished'),
+(10, 11, '2026-02-04', '19:00:00', 2, 2, 'finished'),
+(1, 4, '2026-02-05', '19:00:00', 2, 0, 'finished'),
+(2, 5, '2026-02-06', '19:00:00', 1, 3, 'finished'),
+(3, 6, '2026-02-07', '19:00:00', 0, 2, 'finished'),
+(7, 8, '2026-02-08', '19:00:00', 1, 1, 'finished'),
+(9, 10, '2026-02-09', '19:00:00', 2, 1, 'finished'),
+(11, 1, '2026-02-10', '19:00:00', 0, 4, 'finished');
+
+

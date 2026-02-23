@@ -34,6 +34,10 @@ func (s *TeamService) FindAll() ([]models.Team, error) {
 	return s.teamRepo.FindAll()
 }
 
+func (s *TeamService) FindAllPaginated(limit int, offset int) ([]models.Team, int, error) {
+	return s.teamRepo.FindAllPaginated(limit, offset)
+}
+
 func (s *TeamService) FindByID(id int) (*models.Team, error) {
 	return s.teamRepo.FindByID(id)
 }

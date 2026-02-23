@@ -66,6 +66,10 @@ func (s *MatchService) FindAll() ([]models.Match, error) {
 	return s.matchRepo.FindAll()
 }
 
+func (s *MatchService) FindAllPaginated(limit int, offset int) ([]models.Match, int, error) {
+	return s.matchRepo.FindAllPaginated(limit, offset)
+}
+
 func (s *MatchService) FindByID(id int) (*models.Match, error) {
 	return s.matchRepo.FindByID(id)
 }

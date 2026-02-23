@@ -44,7 +44,17 @@ func (h *MatchHandler) Create(c *gin.Context) {
 }
 
 func (h *MatchHandler) FindAll(c *gin.Context) {
-	matches, err := h.matchService.FindAll()
+	var pagination dto.PaginationQuery
+	if err := c.ShouldBindQuery(&pagination); err != nil {
+		c.Error(utils.NewValidationError(err.Error()))
+		return
+	}
+
+	limit := pagination.GetLimit()
+	offset := pagination.GetOffset()
+	page := pagination.GetPage()
+
+	matches, total, err := h.matchService.FindAllPaginated(limit, offset)
 	if err != nil {
 		c.Error(err)
 		return
@@ -64,7 +74,13 @@ func (h *MatchHandler) FindAll(c *gin.Context) {
 		})
 	}
 
-	utils.Success(c, http.StatusOK, "success", response)
+	meta := &utils.Meta{
+		Total:    total,
+		Page:     page,
+		PageSize: limit,
+	}
+
+	utils.SuccessWithMeta(c, http.StatusOK, "success", response, meta)
 }
 
 func (h *MatchHandler) FindByID(c *gin.Context) {

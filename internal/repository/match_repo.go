@@ -42,6 +42,27 @@ func (r *MatchRepository) FindAll() ([]models.Match, error) {
 	return matches, nil
 }
 
+func (r *MatchRepository) FindAllPaginated(limit int, offset int) ([]models.Match, int, error) {
+	var matches []models.Match
+	var total int
+
+	// Get total count
+	countQuery := `SELECT COUNT(*) FROM matches WHERE deleted_at IS NULL`
+	err := r.db.Get(&total, countQuery)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	// Get paginated data
+	query := `SELECT id, home_team_id, away_team_id, match_date, match_time, home_score, away_score, status, created_at, updated_at
+			  FROM matches WHERE deleted_at IS NULL ORDER BY match_date, match_time LIMIT $1 OFFSET $2`
+	err = r.db.Select(&matches, query, limit, offset)
+	if err != nil {
+		return nil, 0, err
+	}
+	return matches, total, nil
+}
+
 func (r *MatchRepository) FindByID(id int) (*models.Match, error) {
 	var match models.Match
 	query := `SELECT id, home_team_id, away_team_id, match_date, match_time, home_score, away_score, status, created_at, updated_at
