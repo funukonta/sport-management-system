@@ -91,3 +91,4 @@ main.go
 - List endpoints now support pagination and return metadata.
 - Dockerization and CI/CD are not implemented in this version.
 
+## To answer Question 2 and 3, please see [Answer.md](Answer.md) for my detailed responses.
