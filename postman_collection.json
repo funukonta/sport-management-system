@@ -1,0 +1,514 @@
+{
+	"info": {
+		"_postman_id": "sport-management-system",
+		"name": "Sport Management System API",
+		"description": "API documentation for the Sport Management System",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8080/api/v1",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.data && jsonData.data.token) {",
+									"    pm.collectionVariables.set('token', jsonData.data.token);",
+									"}"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"admin@admin.com\",\n    \"password\": \"admin123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/login",
+							"host": ["{{base_url}}"],
+							"path": ["login"]
+						},
+						"description": "Login with email and password. Returns a JWT token."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Teams",
+			"item": [
+				{
+					"name": "Create Team",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Team A\",\n    \"logo\": \"https://example.com/logo.png\",\n    \"founded_year\": 2020,\n    \"address\": \"123 Main St\",\n    \"city\": \"Jakarta\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/teams/",
+							"host": ["{{base_url}}"],
+							"path": ["teams", ""]
+						},
+						"description": "Create a new team."
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Teams",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/teams/?page=1",
+							"host": ["{{base_url}}"],
+							"path": ["teams", ""],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						},
+						"description": "Get teams with pagination. Default is 10 items per page; use page query (example: page=1)."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Team by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/teams/1",
+							"host": ["{{base_url}}"],
+							"path": ["teams", "1"]
+						},
+						"description": "Get a team by its ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Team",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Team A Updated\",\n    \"logo\": \"https://example.com/logo-updated.png\",\n    \"founded_year\": 2021,\n    \"address\": \"456 New St\",\n    \"city\": \"Bandung\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/teams/1",
+							"host": ["{{base_url}}"],
+							"path": ["teams", "1"]
+						},
+						"description": "Update a team by its ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Team",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/teams/1",
+							"host": ["{{base_url}}"],
+							"path": ["teams", "1"]
+						},
+						"description": "Soft delete a team by its ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Players by Team ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/teams/1/players",
+							"host": ["{{base_url}}"],
+							"path": ["teams", "1", "players"]
+						},
+						"description": "Get all players belonging to a specific team."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Players",
+			"item": [
+				{
+					"name": "Create Player",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"team_id\": 1,\n    \"name\": \"John Doe\",\n    \"height\": 180.5,\n    \"weight\": 75.0,\n    \"position\": \"forward\",\n    \"jersey_number\": 10\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/players/",
+							"host": ["{{base_url}}"],
+							"path": ["players", ""]
+						},
+						"description": "Create a new player. Valid positions: forward, midfielder, defender, goalkeeper."
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Players",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/players/?page=1",
+							"host": ["{{base_url}}"],
+							"path": ["players", ""],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						},
+						"description": "Get players with pagination. Default is 10 items per page; use page query (example: page=1)."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Player by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/players/1",
+							"host": ["{{base_url}}"],
+							"path": ["players", "1"]
+						},
+						"description": "Get a player by its ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Player",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"team_id\": 1,\n    \"name\": \"John Doe Updated\",\n    \"height\": 182.0,\n    \"weight\": 76.5,\n    \"position\": \"midfielder\",\n    \"jersey_number\": 7\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/players/1",
+							"host": ["{{base_url}}"],
+							"path": ["players", "1"]
+						},
+						"description": "Update a player by its ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Player",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/players/1",
+							"host": ["{{base_url}}"],
+							"path": ["players", "1"]
+						},
+						"description": "Soft delete a player by its ID."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Matches",
+			"item": [
+				{
+					"name": "Create Match",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"home_team_id\": 1,\n    \"away_team_id\": 2,\n    \"match_date\": \"2026-03-01\",\n    \"match_time\": \"15:00:00\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/matches/",
+							"host": ["{{base_url}}"],
+							"path": ["matches", ""]
+						},
+						"description": "Create a new match. Home and away teams must be different and both must exist."
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Matches",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/matches/?page=1",
+							"host": ["{{base_url}}"],
+							"path": ["matches", ""],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						},
+						"description": "Get matches with pagination, ordered by match date and time. Default is 10 items per page; use page query (example: page=1)."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Match by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/matches/1",
+							"host": ["{{base_url}}"],
+							"path": ["matches", "1"]
+						},
+						"description": "Get a match by its ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Match",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"home_team_id\": 1,\n    \"away_team_id\": 3,\n    \"match_date\": \"2026-03-15\",\n    \"match_time\": \"18:00:00\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/matches/1",
+							"host": ["{{base_url}}"],
+							"path": ["matches", "1"]
+						},
+						"description": "Update a match by its ID. Only matches with status 'scheduled' can be updated."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Match",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/matches/1",
+							"host": ["{{base_url}}"],
+							"path": ["matches", "1"]
+						},
+						"description": "Soft delete a match by its ID."
+					},
+					"response": []
+				},
+				{
+					"name": "Add Match Log",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"player_id\": 1,\n    \"minute\": 15,\n    \"event_type\": \"goal\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/matches/1/logs",
+							"host": ["{{base_url}}"],
+							"path": ["matches", "1", "logs"]
+						},
+						"description": "Add one match event log. Valid event types: goal, assist, yellow_card, red_card. Match must be scheduled and player must belong to home/away team."
+					},
+					"response": []
+				},
+				{
+					"name": "Finish Match",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/matches/1/finish",
+							"host": ["{{base_url}}"],
+							"path": ["matches", "1", "finish"]
+						},
+						"description": "Mark match as finished. Final score is automatically calculated from goal logs."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Match Report",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/matches/1/report",
+							"host": ["{{base_url}}"],
+							"path": ["matches", "1", "report"]
+						},
+						"description": "Get resulted match report including schedule, teams, final score, result status, top scorer, and accumulated wins for home/away team."
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
